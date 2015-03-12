@@ -11,4 +11,6 @@
 |
 */
 
-Route::get('/', 'WelcomeController@index');
+Route::get('/', 'FormController@index');
+
+Route::post('messages', 'TasksController@messages');
