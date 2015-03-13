@@ -4,12 +4,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Period extends Model {
 
-		/**
-		 * The database table used by the model.
-		 *
-		 * @var string
-		 */
 		protected $table = 'periods';
+
+		protected $fillable = ['interval', 'name', 'selectable'];
+
+		public $timestamps = false;
 
 		public function tasks() {
 				return $this->belongsToMany('App\Models\Task')->withPivot('cumulative');

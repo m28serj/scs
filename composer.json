@@ -6,7 +6,7 @@
 	"type": "project",
 	"repositories": [
 	  {
-		"type": "vcs",
+		"type": "git",
 		"url": "https://github.com/m28serj/date"
 	  }
 	],
@@ -41,8 +41,7 @@
 		"post-update-cmd": [
 		  "php artisan clear-compiled",
 		  "php artisan ide-helper:generate",
-		  "php artisan optimize",
-		  "php artisan vendor:publish"
+		  "php artisan optimize"
 		],
 		"post-create-project-cmd": [
 			"php -r \"copy('.env.example', '.env');\"",
