@@ -1,0 +1,33 @@
+@import url(../fonts/open-sans.css);
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	color: #000000;
+	font-family: 'Open Sans', sans-serif;
+	padding: 20px 0 0 0;
+	margin: 0px !important;
+	font-size: 12px;
+	direction: ltr;
+	height: 100%;
+}
+
+input[type=checkbox], input[type=radio] {
+	margin: 2px 0 0;
+}
+
+#main-container {
+}
+
+.form-horizontal .control-label {
+	/*text-align: left;*/
+	padding-left: 20px;
+	font-weight: normal;
+}
+
+label.error {
+	color: red;
+	font-weight: 300;
+}
