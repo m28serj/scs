@@ -12,7 +12,7 @@ class CreateTypeTranslationsTable extends Migration {
 						$table->integer('type_id');
 						$table->integer('locale_id');
 						$table->string('text', 255);
-						$table->unique(['type_id', 'locale_id'], 'unique');
+						$table->primary(['type_id', 'locale_id']);
 				});
 		}
 

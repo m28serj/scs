@@ -12,7 +12,7 @@ class CreatePeriodTaskTable extends Migration {
 						$table->integer('task_id');
 						$table->integer('period_id');
 						$table->boolean('cumulative')->default(0);
-						$table->unique(['task_id', 'period_id'], 'unique');
+						$table->primary(['task_id', 'period_id']);
 				});
 		}
 
