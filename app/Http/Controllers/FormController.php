@@ -6,24 +6,13 @@ use App\Models\Locale;
 
 class FormController extends Controller {
 
-		protected $data;
-		protected $groups;
-		protected $locales;
-		protected $periods;
+		public function index(Group $groups, Period $periods, Locale $locales) {
 
-		public function __construct(Group $groups, Period $periods, Locale $locales){
+				$data['groups'] = $groups->all();
+				$data['locales'] = $locales->all();
+				$data['periods'] = $periods->whereSelectable(1)->get();
 
-				$this->groups = $groups;
-				$this->locales = $locales;
-				$this->periods = $periods;
-		}
-		public function index() {
-
-				$this->data['groups'] = $this->groups->all();
-				$this->data['locales'] = $this->locales->all();
-				$this->data['periods'] = $this->periods->where('selectable',1)->get();
-
-				return view('form', $this->data);
+				return view('form', $data);
 		}
 
 }

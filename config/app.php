@@ -202,7 +202,6 @@ return [
 		'Form'=> 'Illuminate\Html\FormFacade',
 		'HTML'=> 'Illuminate\Html\HtmlFacade',
 
-		'Date'     => 'M28Serj\Date\Date',
 		'Debugbar' => 'Barryvdh\Debugbar\Facade',
 
 	],

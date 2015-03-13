@@ -14,15 +14,15 @@ class TasksController extends Controller {
 				$this->tasks = $tasks;
 		}
 
-		public function messages(GetMessagesRequest $request) {
+		public function messages(GetMessagesRequest $request ) {
 				App::setLocale($request->get('locale'));
 
 				$holidays = $this->holidays->all()->keyBy('date');
 
 				$tasks = $this->tasks->whereHas('group', function ($q) use ($request) {
 						$q->where('id', '=', $request->get('group'));
-				})->with(['group', 'periods', 'type', 'type.translations' => function ($query) {
-						$query->where('locales.code', App::getLocale());
+				})->with(['group', 'periods', 'type', 'type.translations' => function ($q) {
+						$q->where('locales.code', App::getLocale());
 				}])->get();
 
 				$messageGroups = [];
