@@ -10,7 +10,7 @@ git clone https://github.com/m28serj/scs.git
 ```php
 cd scs && composer install
 ```
-Редактируем конфигурацию базы данных (.env / app/config/database.php)
+Редактируем конфигурацию базы данных (.env | app/config/database.php)
 
 ## Миграции и начальные данные
 ```php
