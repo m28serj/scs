@@ -5,19 +5,21 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\Group
  *
- * @property integer $id 
+ * @property integer $id
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Group whereId($value)
  */
+
 /**
  * App\Models\Group
  *
- * @property integer $id 
+ * @property integer $id
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Group whereId($value)
  */
-class Group extends Model {
+class Group extends Model
+{
 
-		protected $table = 'groups';
+    protected $table = 'groups';
 
-		public $timestamps = false;
+    public $timestamps = false;
 
 }
