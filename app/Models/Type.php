@@ -23,6 +23,10 @@ use App;
  * @property-read mixed $text
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Type whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Type whereOffsetNext($value)
+ * @property string $text_ru
+ * @property string $text_uk
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Type whereTextRu($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Type whereTextUk($value)
  */
 class Type extends Model
 {
