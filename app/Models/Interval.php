@@ -1,5 +1,7 @@
 <?php namespace App\Models;
 
+use App;
+
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -44,6 +46,11 @@ class Interval extends Model
     public function tasks()
     {
         return $this->belongsToMany('App\Models\Task')->withPivot('cumulative');
+    }
+
+    public function getTextAttribute()
+    {
+        return $this->attributes['text_' . App::getLocale()];
     }
 
 }

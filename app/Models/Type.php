@@ -37,4 +37,9 @@ class Type extends Model
 
     public $timestamps = false;
 
+    public function getTextAttribute()
+    {
+        return $this->attributes['text_' . App::getLocale()];
+    }
+
 }

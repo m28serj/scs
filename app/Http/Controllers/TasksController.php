@@ -21,7 +21,6 @@ class TasksController extends Controller
     public function messages(GetMessagesRequest $request)
     {
         App::setLocale($request->get('locale'));
-
         $holidays = $this->holidays->all()->keyBy('date');
 
         $tasks = $this->tasks->whereHas('group', function ($q) use ($request) {
@@ -41,7 +40,7 @@ class TasksController extends Controller
                     $dateEndPerformPeriod = $dateStartPerformPeriod->copy()->addDays($task->offset)->checkDate($task->group->offset_next, $holidays);
 
                     if ($dateStartPerformPeriod->between(Date::createFromFormat('d.m.Y', $request->get('date_from')), Date::createFromFormat('d.m.Y', $request->get('date_to')))) {
-                        $messages[] = $task->type->attributes['text_' . App::getLocale()] . ' ' . str_replace(['{year}'], [$request->get('year')], $interval->attributes['text_' . App::getLocale()]) . ' ' . Lang::get('dates.to') . $dateEndPerformPeriod->checkDate($task->group->offset_next, $holidays)->format(' j f Y');
+                        $messages[] = $task->type->text . ' ' . str_replace(['{year}'], [$request->get('year')], $interval->text) . ' ' . Lang::get('dates.to') . $dateEndPerformPeriod->checkDate($task->group->offset_next, $holidays)->format(' j f Y');
                     }
                 }
             }
