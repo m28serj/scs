@@ -3,6 +3,8 @@
 use App\Http\Requests\GetMessagesRequest;
 use App\Models\Holiday;
 use App\Models\Task;
+use App\Date;
+use Lang;
 use App;
 
 class TasksController extends Controller
@@ -28,7 +30,21 @@ class TasksController extends Controller
 
         $messageGroups = [];
         foreach ($tasks as $task) {
-            $messages = $task->messages($request->get('interval'), $request->get('year'), $request->get('date_from'), $request->get('date_to'), $holidays);
+            $messages = [];
+            $current = $task->current_period;
+
+            if (!$task->periodicities->isEmpty()) {
+                $periodicity = ($task->periodicities->count() > 1) ? $task->periodicities->keyBy('interval')->get($request->get('interval')) : $task->periodicities->first();
+                foreach ($periodicity->intervals as $interval) {
+                    $dateStartTaskPeriod = Date::createFromFormat('d.m.Y', $interval->start . '.' . $request->get('year'));
+                    $dateStartPerformPeriod = ($current) ? $dateStartTaskPeriod->copy() : $dateStartPerformPeriod = $dateStartTaskPeriod->copy()->addMonths($interval->months);
+                    $dateEndPerformPeriod = $dateStartPerformPeriod->copy()->addDays($task->offset)->checkDate($task->group->offset_next, $holidays);
+
+                    if ($dateStartPerformPeriod->between(Date::createFromFormat('d.m.Y', $request->get('date_from')), Date::createFromFormat('d.m.Y', $request->get('date_to')))) {
+                        $messages[] = $task->type->attributes['text_' . App::getLocale()] . ' ' . str_replace(['{year}'], [$request->get('year')], $interval->attributes['text_' . App::getLocale()]) . ' ' . Lang::get('dates.to') . $dateEndPerformPeriod->checkDate($task->group->offset_next, $holidays)->format(' j f Y');
+                    }
+                }
+            }
             if (!empty($messages)) {
                 $messageGroups[$task->type->id] = $messages;
             }

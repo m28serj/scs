@@ -1,7 +1,5 @@
 <?php namespace App\Models;
 
-use App\Date;
-use Lang;
 use App;
 
 use Illuminate\Database\Eloquent\Model;
@@ -62,27 +60,5 @@ class Task extends Model
     public function periodicities()
     {
         return $this->belongsToMany('App\Models\Periodicity');
-    }
-
-    public function messages($interval, $year, $dateFrom, $dateTo, $holidays)
-    {
-        $messages = [];
-        $current = $this->current_period;
-
-        if (!$this->periodicities->isEmpty()) {
-            $periodicity = ($this->periodicities->count() > 1) ? $this->periodicities->keyBy('interval')->get($interval) : $this->periodicities->first();
-
-            foreach ($periodicity->intervals as $interval) {
-
-                $dateStartTaskPeriod = Date::createFromFormat('d.m.Y', $interval->start . '.' . $year);
-                $dateStartPerformPeriod = ($current) ? $dateStartTaskPeriod->copy() : $dateStartPerformPeriod = $dateStartTaskPeriod->copy()->addMonths($interval->months);
-                $dateEndPerformPeriod = $dateStartPerformPeriod->copy()->addDays($this->offset)->checkDate($this->group->offset_next, $holidays);
-
-                if ($dateStartPerformPeriod->between(Date::createFromFormat('d.m.Y', $dateFrom), Date::createFromFormat('d.m.Y', $dateTo))) {
-                    $messages[] = $this->type->attributes['text_' . App::getLocale()] . ' ' . str_replace(['{year}'], [$year], $interval->attributes['text_' . App::getLocale()]) . ' ' . Lang::get('dates.to') . $dateEndPerformPeriod->checkDate($this->group->offset_next, $holidays)->format(' j f Y');
-                }
-            }
-        }
-        return $messages;
     }
 }
