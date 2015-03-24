@@ -1,7 +1,7 @@
 <?php
 /**
  * An helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.0.15 on 2015-03-13.
+ * Generated for Laravel 5.0.17 on 2015-03-18.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -3213,18 +3213,6 @@ namespace {
         /**
          * Find a model by its primary key.
          *
-         * @param mixed $id
-         * @param array $columns
-         * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|null 
-         * @static 
-         */
-        public static function find($id, $columns = array()){
-            return \Illuminate\Database\Eloquent\Builder::find($id, $columns);
-        }
-        
-        /**
-         * Find a model by its primary key.
-         *
          * @param array $ids
          * @param array $columns
          * @return \Illuminate\Database\Eloquent\Collection 
@@ -5797,8 +5785,8 @@ namespace {
          * The following header keys are supported:
          * 
          *  * Request::HEADER_CLIENT_IP:    defaults to X-Forwarded-For   (see getClientIp())
-         *  * Request::HEADER_CLIENT_HOST:  defaults to X-Forwarded-Host  (see getClientHost())
-         *  * Request::HEADER_CLIENT_PORT:  defaults to X-Forwarded-Port  (see getClientPort())
+         *  * Request::HEADER_CLIENT_HOST:  defaults to X-Forwarded-Host  (see getHost())
+         *  * Request::HEADER_CLIENT_PORT:  defaults to X-Forwarded-Port  (see getPort())
          *  * Request::HEADER_CLIENT_PROTO: defaults to X-Forwarded-Proto (see getScheme() and isSecure())
          * 
          * Setting an empty value allows to disable the trusted header for the given key.
@@ -8426,8 +8414,8 @@ namespace {
          * The following header keys are supported:
          * 
          *  * Request::HEADER_CLIENT_IP:    defaults to X-Forwarded-For   (see getClientIp())
-         *  * Request::HEADER_CLIENT_HOST:  defaults to X-Forwarded-Host  (see getClientHost())
-         *  * Request::HEADER_CLIENT_PORT:  defaults to X-Forwarded-Port  (see getClientPort())
+         *  * Request::HEADER_CLIENT_HOST:  defaults to X-Forwarded-Host  (see getHost())
+         *  * Request::HEADER_CLIENT_PORT:  defaults to X-Forwarded-Port  (see getPort())
          *  * Request::HEADER_CLIENT_PROTO: defaults to X-Forwarded-Proto (see getScheme() and isSecure())
          * 
          * Setting an empty value allows to disable the trusted header for the given key.
@@ -12180,11 +12168,6 @@ namespace {
         public static function hasMacro($name){
             return \Illuminate\Html\HtmlBuilder::hasMacro($name);
         }
-        
-    }
-
-
-    class Date extends \M28Serj\Date\Date{
         
     }
 

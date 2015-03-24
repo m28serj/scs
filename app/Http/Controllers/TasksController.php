@@ -29,23 +29,17 @@ class TasksController extends Controller
 
         $messageGroups = [];
         foreach ($tasks as $task) {
-            $messages = [];
-            $current = $task->current_period;
-
             if (!$task->periodicities->isEmpty()) {
                 $periodicity = ($task->periodicities->count() > 1) ? $task->periodicities->keyBy('interval')->get($request->get('interval')) : $task->periodicities->first();
                 foreach ($periodicity->intervals as $interval) {
                     $dateStartTaskPeriod = Date::createFromFormat('d.m.Y', $interval->start . '.' . $request->get('year'));
-                    $dateStartPerformPeriod = ($current) ? $dateStartTaskPeriod->copy() : $dateStartPerformPeriod = $dateStartTaskPeriod->copy()->addMonths($interval->months);
+                    $dateStartPerformPeriod = ($task->current_period) ? $dateStartTaskPeriod->copy() : $dateStartPerformPeriod = $dateStartTaskPeriod->copy()->addMonths($interval->months);
                     $dateEndPerformPeriod = $dateStartPerformPeriod->copy()->addDays($task->offset)->checkDate($task->group->offset_next, $holidays);
 
                     if ($dateStartPerformPeriod->between(Date::createFromFormat('d.m.Y', $request->get('date_from')), Date::createFromFormat('d.m.Y', $request->get('date_to')))) {
-                        $messages[] = $task->type->text . ' ' . str_replace(['{year}'], [$request->get('year')], $interval->text) . ' ' . Lang::get('dates.to') . $dateEndPerformPeriod->checkDate($task->group->offset_next, $holidays)->format(' j f Y');
+                        $messageGroups[$task->type->id][] = $task->type->text . ' ' . strtr($interval->text, ['{year}' => $request->get('year')]) . ' ' . Lang::get('dates.to') . $dateEndPerformPeriod->checkDate($task->group->offset_next, $holidays)->format(' j f Y');
                     }
                 }
-            }
-            if (!empty($messages)) {
-                $messageGroups[$task->type->id] = $messages;
             }
         }
 
