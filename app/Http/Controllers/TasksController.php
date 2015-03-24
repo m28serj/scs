@@ -23,21 +23,32 @@ class TasksController extends Controller
         App::setLocale($request->get('locale'));
         $holidays = $this->holidays->all()->keyBy('date');
 
-        $tasks = $this->tasks->whereHas('group', function ($q) use ($request) {
-            $q->where('id', '=', $request->get('group'));
-        })->with(['group', 'periodicities', 'periodicities.intervals', 'type'])->get();
+        $tasks = $this->tasks->whereHas(
+            'group',
+            function ($q) use ($request) {
+                $q->where('id', '=', $request->get('group'));
+            }
+        )->with(['group', 'periodicities', 'periodicities.intervals', 'type'])->get();
 
         $messageGroups = [];
         foreach ($tasks as $task) {
             if (!$task->periodicities->isEmpty()) {
-                $periodicity = ($task->periodicities->count() > 1) ? $task->periodicities->keyBy('interval')->get($request->get('interval')) : $task->periodicities->first();
+                if ($task->periodicities->count() > 1) {
+                    $periodicity = $task->periodicities->keyBy('interval')->get($request->get('interval'));
+                } else {
+                    $periodicity = $task->periodicities->first();
+                }
                 foreach ($periodicity->intervals as $interval) {
-                    $dateStartTaskPeriod = Date::createFromFormat('d.m.Y', $interval->start . '.' . $request->get('year'));
-                    $dateStartPerformPeriod = ($task->current_period) ? $dateStartTaskPeriod->copy() : $dateStartPerformPeriod = $dateStartTaskPeriod->copy()->addMonths($interval->months);
-                    $dateEndPerformPeriod = $dateStartPerformPeriod->copy()->addDays($task->offset)->checkDate($task->group->offset_next, $holidays);
+                    $start_task = Date::createFromFormat('d.m.Y', $interval->start . '.' . $request->get('year'));
+                    if ($task->current_period) {
+                        $start_perform = $start_task->copy();
+                    } else {
+                        $start_perform = $start_task->copy()->addMonths($interval->months);
+                    }
+                    $end_perform = $start_perform->copy()->addDays($task->offset)->checkDate($task->group->offset_next, $holidays);
 
-                    if ($dateStartPerformPeriod->between(Date::createFromFormat('d.m.Y', $request->get('date_from')), Date::createFromFormat('d.m.Y', $request->get('date_to')))) {
-                        $messageGroups[$task->type->id][] = $task->type->text . ' ' . strtr($interval->text, ['{year}' => $request->get('year')]) . ' ' . Lang::get('dates.to') . $dateEndPerformPeriod->checkDate($task->group->offset_next, $holidays)->format(' j f Y');
+                    if ($start_perform->between(Date::createFromFormat('d.m.Y', $request->get('date_from')), Date::createFromFormat('d.m.Y', $request->get('date_to')))) {
+                        $messageGroups[$task->type->id][] = $task->type->text . ' ' . strtr($interval->text, ['{year}' => $request->get('year')]) . ' ' . Lang::get('dates.to') . $end_perform->checkDate($task->group->offset_next, $holidays)->format(' j f Y');
                     }
                 }
             }
